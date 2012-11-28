@@ -1,0 +1,11 @@
+<%= form_for(:userlocation, url: userlocations_path) do |f| %>
+
+
+  <div class="field">
+    <%= f.text_field :address %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

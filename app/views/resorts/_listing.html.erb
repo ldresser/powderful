@@ -1,0 +1,32 @@
+<table class="table table-bordered">
+  <tr>
+    <th>Name</th>
+    <th>Runs</th>
+    <th>Area</th>
+    <th>Vertical drop</th>
+    <th>City</th>
+    <th>State</th>
+    <th>Distance</th>
+    <th>Travel Time</th>
+    <th>SC Name</th>
+    <th>Primary Surface Condition</th>
+  </tr>
+
+<% @resorts.each do |resort| %>
+  <tr>
+    <td><%= resort.name %></td>
+    <td><%= resort.runs %></td>
+    <td><%= resort.area %></td>
+    <td><%= resort.vertical_drop %></td>
+    <td><%= resort.city %></td>
+    <td><%= resort.state %></td>
+    <td><%= @gmatrix_result["rows"][0]["elements"][resort.id - 1]["distance"]["text"] %></td>
+    <td><%= @gmatrix_result["rows"][0]["elements"][resort.id - 1]["duration"]["text"] %></td>
+    <td><%= @scHash[resort.snowcountryid.to_s]["resortName"] %></td>
+    <td><%= @scHash[resort.snowcountryid.to_s]["primarySurfaceCondition"] %></td>
+        <td><%= @scHash[resort.snowcountryid.to_s]["primarySurfaceCondition"] %></td>
+  </tr>
+<% end %>
+</table>
+
+

@@ -1,0 +1,41 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  runs: 1
+  pr_beginner: 1.5
+  pr_intermediate: 1.5
+  pr_advanced: 1.5
+  pr_expert: 1.5
+  area: 1
+  elevation_base: 1
+  elevation_peak: 1
+  vertical_drop: 1
+  longest_trail: 1
+  lifts: 1
+  url: MyString
+  address: MyString
+  city: MyString
+  state: MyString
+  zip: MyString
+  trail_map: MyString
+
+two:
+  name: MyString
+  runs: 1
+  pr_beginner: 1.5
+  pr_intermediate: 1.5
+  pr_advanced: 1.5
+  pr_expert: 1.5
+  area: 1
+  elevation_base: 1
+  elevation_peak: 1
+  vertical_drop: 1
+  longest_trail: 1
+  lifts: 1
+  url: MyString
+  address: MyString
+  city: MyString
+  state: MyString
+  zip: MyString
+  trail_map: MyString

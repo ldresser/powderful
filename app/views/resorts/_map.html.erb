@@ -1,0 +1,29 @@
+
+
+
+<div id="map_canvas">
+	<script type="text/javascript">
+
+    // Initialise the map and plot the user's current location
+    initialize(<%= session[:uLat] %>,<%= session[:uLng] %>)
+
+    //Loop through the resorts table and plot each on the map
+    <% @resorts.each do |resort| %>
+	    var rLat = <%= resort.latitude %>
+	    var rLng = <%= resort.longitude %>
+	    var rTitle = '<%= resort.name %>'
+	    addMarkers(rLat,rLng,rTitle)
+    <% end %>
+
+var lat_min = <%= @lat_min %>
+var lng_min = <%= @lng_min %>
+var lat_max = <%= @lat_max %>
+var lng_max = <%= @lng_max %>
+
+zoomToFit(lat_max,lng_max,lat_min,lng_min);
+
+  </script>
+
+</div>	
+
+
