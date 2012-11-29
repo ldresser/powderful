@@ -1,4 +1,4 @@
-<table class="table table-bordered">
+<table id="listing-table" class="table table-bordered"> 
   <tr>
     <th>Name</th>
     <th>Runs</th>
@@ -6,8 +6,11 @@
     <th>Vertical drop</th>
     <th>City</th>
     <th>State</th>
-    <th>Distance</th>
+    <th>Latitude</th>  <!--note, keep this col ordering the same; will need to change slider JS if this gets changed -->
+    <th>Longitude</th>  <!--note, keep this col ordering the same; will need to change slider JS if this gets changed -->
+    <th>Distance</th>  
     <th>Travel Time</th>
+    <th>Travel Time int (hidden)</th>  <!--note, keep this col ordering the same; will need to change slider JS if this gets changed -->
     <th>SC Name</th>
     <th>Primary Surface Condition</th>
   </tr>
@@ -20,8 +23,11 @@
     <td><%= resort.vertical_drop %></td>
     <td><%= resort.city %></td>
     <td><%= resort.state %></td>
+    <td><%= resort.latitude %></td>
+    <td><%= resort.longitude %></td>
     <td><%= @gmatrix_result["rows"][0]["elements"][resort.id - 1]["distance"]["text"] %></td>
     <td><%= @gmatrix_result["rows"][0]["elements"][resort.id - 1]["duration"]["text"] %></td>
+    <td><%= @gmatrix_result["rows"][0]["elements"][resort.id - 1]["duration"]["value"] %></td>
     <td><%= @scHash[resort.snowcountryid.to_s]["resortName"] %></td>
     <td><%= @scHash[resort.snowcountryid.to_s]["primarySurfaceCondition"] %></td>
         <td><%= @scHash[resort.snowcountryid.to_s]["primarySurfaceCondition"] %></td>
@@ -29,4 +35,7 @@
 <% end %>
 </table>
 
-
+<script>
+ // Hide the hidden column
+ $("th:nth-child(9),td:nth-child(9)").hide();
+ </script>

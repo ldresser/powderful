@@ -32,6 +32,16 @@ class ResortsController < ApplicationController
     gmatrix_url = "http://maps.googleapis.com/maps/api/distancematrix/json?origins=#{org_str}&mode=driving&units=imperial&sensor=false&destinations=#{dest_str}"
     @gmatrix_result = ActiveSupport::JSON.decode(open(URI.encode(gmatrix_url)).read)
     # maybe split preceding line and check the open function is json
+    # note: distance int is in metres, time is in seconds
+
+    # drop the time values into an array so we can query the min and max
+    drive_times = []
+    @resorts.each do |resort|
+      drive_times << @gmatrix_result["rows"][0]["elements"][resort.id - 1]["duration"]["value"]
+    end 
+    @drive_secs_min = drive_times.min
+    @drive_secs_max = drive_times.max
+
 
     # HAMWeather API (note: huge data return, rate-limited)
     dest_str_csv = dest_str.gsub('|',',/forecasts/')

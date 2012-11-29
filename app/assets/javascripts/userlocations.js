@@ -1,7 +1,6 @@
 
 function getLocation()
      {
-        alert('getting location!');
     if (navigator.geolocation)
     {
     navigator.geolocation.getCurrentPosition(showPosition, handleError);
@@ -10,7 +9,6 @@ function getLocation()
         // geoloc not supported in this browser
         // render form to ask user for direct input
         // window.location.href = "/userlocations/new"
-        alert('not supported!');
          $("#user-input-form-modal-mcb").show()
         ;}
     }
@@ -25,13 +23,13 @@ function getLocation()
                 "userlocation[lat]": position.coords.latitude,
                 "userlocation[lng]": position.coords.longitude,
             },
-            datatype: 'json'
+            datatype: 'json',
+            success: function(){window.location.href="/show"}
         });
        
     }
 
     function handleError(err) {
-        alert('user declined!');
         // render form to ask user for manual input
         // window.location.href = "/userlocations/new"
          $("#user-input-form-modal-mcb").show()
