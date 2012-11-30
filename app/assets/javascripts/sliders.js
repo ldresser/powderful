@@ -1,10 +1,26 @@
 function time_format(secs) {
-    secs = number(secs)
-    var h = math.floor(secs/3600);
-    var m = math.floor(secs % 3600 / 60);
-    return h + 'h ' + m + 'min';
+    var h = Math.floor(secs/3600);
+    var m = Math.floor(secs % 3600 / 60);
+    return h + ' hours ' + m + ' mins';
 };
 
+function stars(num){
+    var a = Array(6);
+    for (var i = 1; i < 6; i++) {
+        if (i <= num) {
+            a[i] = "★";
+            // console.log("num=" + num + ", i=" + i + ", ★");
+        }
+        else {
+            a[i] = "☆";
+            // console.log("num=" + num + ", i=" + i + ", ☆");
+        };
+        
+    };
+    console.log(num + " " + a);
+    return a.join("");
+
+};
 
  $(function() {
         $( "#slider-range-distance" ).slider({
@@ -13,7 +29,7 @@ function time_format(secs) {
             max: (drive_secs_max * 1.2),
             values: [ drive_secs_min * 0.99 , drive_secs_max * 1.01],
             slide: function( event, ui ) {
-                $( "#amount-distance" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ]); 
+                $( "#amount-distance" ).val( time_format($( "#slider-range-distance" ).slider( "values", 0 )) + " - " + time_format($( "#slider-range-distance" ).slider( "values", 1 )) ); 
             },
             change: function( event, ui ) {
                 var lb = ui.values[0];
@@ -29,8 +45,8 @@ function time_format(secs) {
 
 
                 $('#listing-table tr').each(function(){
-                    $(this).find('td:nth-child(11)').each(function(){
-                        console.log("cell 11: " + $(this).text());
+                    $(this).find('td:nth-child(3)').each(function(){
+                    //    console.log("cell 11: " + $(this).text());
                     //do your stuff, you can use $(this) to get current cell
 
                     //(1) hide & remove if (< lb or > ub) and not yet hidden
@@ -38,22 +54,22 @@ function time_format(secs) {
                         //hide the row
                         $(this).parent().hide();
                         //remove marker from map
-                        var lat = parseFloat($(this).parent().find('td:nth-child(7)').text());
-                        var lng = parseFloat($(this).parent().find('td:nth-child(8)').text());
-                        console.log("passing " + lat + ", " + lng);
-                        delMarker(lat,lng);
+                        var lat = parseFloat($(this).parent().find('td:nth-child(1)').text());
+                        var lng = parseFloat($(this).parent().find('td:nth-child(2)').text());
+                        //console.log("passing " + lat + ", " + lng); //debug
+                        delMarker(lat,lng); 
                     }
 
                     //(2) show & add if > lb and < ub and hidden
-                    else if (parseFloat($(this).text()) > lb && parseFloat($(this).text()) < ub && $(this).parent().not(":visible")) {
+                    if (parseFloat($(this).text()) > lb && parseFloat($(this).text()) < ub && !($(this).parent().is(":visible"))) {
                         //hide the row
                         $(this).parent().show();
                         //remove marker from map
-                        var lat = parseFloat($(this).parent().find('td:nth-child(7)').text());
-                        var lng = parseFloat($(this).parent().find('td:nth-child(8)').text());
+                        var lat = parseFloat($(this).parent().find('td:nth-child(1)').text());
+                        var lng = parseFloat($(this).parent().find('td:nth-child(2)').text());
                         var title = $(this).parent().find('td:nth-child(1)').text();
-                        console.log("passing " + lat + ", " + lng);
-                        addMarkers(lat,lng,title);
+                        // console.log("passing " + lat + ", " + lng);// debug
+                        addMarkers(lat,lng,title); 
                     }
 
                     })
@@ -62,24 +78,26 @@ function time_format(secs) {
             }
             
         });
-        $( "#amount-distance" ).val( $( "#slider-range-distance" ).slider( "values", 0 ) +
-            " - " + $( "#slider-range-distance" ).slider( "values", 1 ));
+
+
+        $( "#amount-distance" ).val( time_format($( "#slider-range-distance" ).slider( "values", 0 )) + " - " + time_format($( "#slider-range-distance" ).slider( "values", 1 )));
 
     });
 
   $(function() {
         $( "#slider-range-conditions" ).slider({
+            step: 1,
             range: true,
             min: 0,
-            max: 500,
-            values: [ 75, 300 ],
+            max: 5,
+            values: [ 0, 5 ],
             slide: function( event, ui ) {
-                $( "#amount-conditions" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+                $( "#amount-conditions" ).val( stars($( "#slider-range-conditions" ).slider( "values", 0 )) + " - " + stars($( "#slider-range-conditions" ).slider( "values", 1 )) ); 
             }
         });
-        $( "#amount-conditions" ).val( "$" + $( "#slider-range-conditions" ).slider( "values", 0 ) +
-            " - $" + $( "#slider-range-conditions" ).slider( "values", 1 ) );
+        $( "#amount-conditions" ).val( stars($( "#slider-range-conditions" ).slider( "values", 0 )) + " - " + stars($( "#slider-range-conditions" ).slider( "values", 1 )) ); 
     });
+
 
     $(function() {
         $( "#slider-range-price" ).slider({

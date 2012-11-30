@@ -1,5 +1,6 @@
 @import "bootstrap";
 
+
 /* Map / Bootstrap overwrite */
 
 #map_canvas img { 
@@ -15,6 +16,22 @@
 $grayMediumLight: #eaeaea;
 
 /* universal */
+
+#link-options {
+  display: inline;
+  list-style-type: none;
+  text-align: right;
+}
+
+#navbar-mcb {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  
+}
+
+#pad {
+  margin-top: 20px;
+}
 
 #map_canvas {
   width: 600px;
@@ -46,6 +63,8 @@ textarea {
 
 /* typography */
 
+
+
 h1, h2, h3, h4, h5, h6 {
   line-height: 1;
 }
@@ -73,19 +92,21 @@ p {
 
 
 /* header */
+/*  Yanone Kaffeesatz  Racing Sans One  */
 
 #logo {
+  font-family: 'Racing Sans One';
   float: left;
   margin-right: 10px;
-  font-size: 1.7em;
-  color: white;
+  font-size: 4em;
+  color: #007BA7;
   text-transform: uppercase;
-  letter-spacing: -1px;
-  padding-top: 9px;
+  letter-spacing: 1px;
+  padding-top: 0px;
   font-weight: bold;
   line-height: 1;
   &:hover {
-    color: white;
+    color: red;
     text-decoration: none;
   }
 }
@@ -95,8 +116,6 @@ p {
 footer {
   margin-top: 45px;
   padding-top: 5px;
-  border-top: 1px solid $grayMediumLight;
-  color: $grayLight;
   a {
     color: $gray;
     &:hover {

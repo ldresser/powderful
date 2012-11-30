@@ -50,13 +50,14 @@ function zoomToFit(lat_max,lng_max,lat_min,lng_min) {
   //google.maps.Marker(markerOptions).setMap(null);
   //alert(markersArray[0].position);
   var pos = new google.maps.LatLng(delLat,delLng);
-  console.log("marker to remove: " + pos); //debug
+  //console.log("marker to remove: " + pos); //debug
   for (i = 0; i < markersArray.length; i++){
-//    console.log("marker " + i + ": " + markersArray[i].position); // debug
+    //console.log("marker " + i + ": " + markersArray[i].position); // debug
       if (String(markersArray[i].position) == String(pos)) {
-        console.log("removing from map " + i + ": " + markersArray[i].position); //debug
+      //  console.log("removing from map " + i + ": " + markersArray[i].position + "(currently " + markersArray.length + " markers)"); //debug
         markersArray[i].setMap(null); // remove from the map
         markersArray.splice(i,1); // remove from the array
+        //console.log("(now " + markersArray.length + " markers)"); //debug
 
       }
   }
