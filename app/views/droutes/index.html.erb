@@ -1,0 +1,31 @@
+<h1>Listing droutes</h1>
+
+<table>
+  <tr>
+    <th>Id</th>
+    <th>Origin</th>
+    <th>Resort</th>
+    <th>Latitude</th>
+    <th>Longitude</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @droutes.each do |droute| %>
+  <tr>
+    <td><%= droute.id %></td>
+    <td><%= droute.origin %></td>
+    <td><%= droute.resort_id %></td>
+    <td><%= droute.latitude %></td>
+    <td><%= droute.longitude %></td>
+    <td><%= link_to 'Show', droute %></td>
+    <td><%= link_to 'Edit', edit_droute_path(droute) %></td>
+    <td><%= link_to 'Destroy', droute, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Droute', new_droute_path %>

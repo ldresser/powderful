@@ -1,13 +1,14 @@
-<h1>Powderful.net</h1>
-<h2>The premier site for skiing in New England and upstate New York.</h2>
+
 
 <div class="center hero-unit">
 <div id="user-input-form-modal-mcb">
 	<h2>Please enter your location</h2>
 <%= render 'form' %>
 </div>
-(map goes here)
 
+<div id="loading-image">
+<%= image_tag("ajax-loader.gif", :alt => "Loading page, please wait") %>
+</div>
 
 
 </div>

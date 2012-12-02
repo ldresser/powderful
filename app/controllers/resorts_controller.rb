@@ -8,47 +8,53 @@ class ResortsController < ApplicationController
 
     @resorts = Resort.all
 
+
     # Boundaries for the map
     @lat_max = [Resort.maximum("latitude"),session[:uLat]].max
     @lng_max = [Resort.maximum("longitude"),session[:uLng]].max
     @lat_min = [Resort.minimum("latitude"),session[:uLat]].min
     @lng_min = [Resort.minimum("longitude"),session[:uLng]].min
     #@map_bound = "sw?:#{lat_min},#{lng_min},ne?:#{lat_max},#{lng_max}"
-    #@map_bound = "#{lat_min},#{lng_min},#{lat_max},#{lng_max}"
-    # Query the Google Distance Matrix API
+    # @map_bound = "#{lat_min},#{lng_min},#{lat_max},#{lng_max}"
     
+
+    # Query the Google Distance Matrix API
+
     # (1/2) Build destination & origin strings (all zip codes in order)
     dest_str =""
     @resorts.each do |resort|
       if dest_str.empty?
-        dest_str = resort.zip.strip
+        dest_str ="#{resort.latitude},#{resort.longitude}"
       else
-        dest_str = "#{dest_str}|#{resort.zip.strip}"
+        dest_str = "#{dest_str}|#{resort.latitude},#{resort.longitude}"
       end
     end
     org_str = "#{session[:uLat]},#{session[:uLng]}"
+    @dest_str = dest_str
     
-    # (2/2) Drop into URL and poll Google  
-    gmatrix_url = "http://maps.googleapis.com/maps/api/distancematrix/json?origins=#{org_str}&mode=driving&units=imperial&sensor=false&destinations=#{dest_str}"
-    @gmatrix_result = ActiveSupport::JSON.decode(open(URI.encode(gmatrix_url)).read)
-    # maybe split preceding line and check the open function is json
-    # note: distance int is in metres, time is in seconds
+    # # (2/2) Drop into URL and poll Google  
+    # gmatrix_url = "http://maps.googleapis.com/maps/api/distancematrix/json?origins=#{org_str}&mode=driving&units=imperial&sensor=false&destinations=#{dest_str}"
+    # @gmatrix_result = ActiveSupport::JSON.decode(open(URI.encode(gmatrix_url)).read)
+    # # maybe split preceding line and check the open function is json
+    # # note: distance int is in metres, time is in seconds
 
-    # drop the time values into an array so we can query the min and max
-    drive_times = []
-    @resorts.each do |resort|
-      drive_times << @gmatrix_result["rows"][0]["elements"][resort.id - 1]["duration"]["value"]
-    end 
-    @drive_secs_min = drive_times.min
-    @drive_secs_max = drive_times.max
+    # # drop the time values into an array so we can query the min and max
+    # drive_times = []
+    # @resorts.each do |resort|
+    #   drive_times << @gmatrix_result["rows"][0]["elements"][resort.id - 1]["duration"]["value"]
+    # end 
+     @drive_secs_min = Resort.minimum("duration_value")
+     @drive_secs_max = Resort.maximum("duration_value")
+     @price_max = Resort.maximum("price")
+     @price_min = Resort.minimum("price")
 
 
-    # HAMWeather API (note: huge data return, rate-limited)
-    dest_str_csv = dest_str.gsub('|',',/forecasts/')
-    ham_id = "ONgIFsqwY9VDB0vCdEr2t"
-    ham_token = "cYqMYSEFJjWEGQJ79ULJCM1xzhPAr0HIgpWJL9da"
-    @hweather_url = "http://api.aerisapi.com/batch?requests=/forecasts/#{dest_str_csv}&client_id=#{ham_id}&client_secret=#{ham_token}"
-    @hweather_result = ActiveSupport::JSON.decode(open(URI.encode(@hweather_url)).read)
+    # # HAMWeather API (note: huge data return, rate-limited)
+    # dest_str_csv = dest_str.gsub('|',',/forecasts/')
+    # ham_id = "ONgIFsqwY9VDB0vCdEr2t"
+    # ham_token = "cYqMYSEFJjWEGQJ79ULJCM1xzhPAr0HIgpWJL9da"
+    # @hweather_url = "http://api.aerisapi.com/batch?requests=/forecasts/#{dest_str_csv}&client_id=#{ham_id}&client_secret=#{ham_token}"
+    # @hweather_result = ActiveSupport::JSON.decode(open(URI.encode(@hweather_url)).read)
 
     # OpenSnow.com API (note: needs attribution)
     # (1) Get list of IDs
@@ -62,7 +68,7 @@ class ResortsController < ApplicationController
     # Snocountry (free to 12/26, then paid)
     #apiKey=angel921.hacksam56
     # sc_url = "http://feeds.snocountry.com/conditions.php?apiKey=angel921.hacksam56&regions=northeast"
-    sc_url = "http://feeds.snocountry.com/conditions.php?apiKey=angel921.hacksam56&ids=802007,303010"
+    sc_url = "http://feeds.snocountry.com/conditions.php?apiKey=angel921.hacksam56&regions=northeast"
     @sc_result = ActiveSupport::JSON.decode(open(URI.encode(sc_url)).read)
     scArray = @sc_result["items"]
     

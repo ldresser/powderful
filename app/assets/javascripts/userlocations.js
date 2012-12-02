@@ -10,6 +10,7 @@ function getLocation()
         // render form to ask user for direct input
         // window.location.href = "/userlocations/new"
          $("#user-input-form-modal-mcb").show()
+         $("#loading-image").hide()
         ;}
     }
     function showPosition(position)
@@ -33,6 +34,7 @@ function getLocation()
         // render form to ask user for manual input
         // window.location.href = "/userlocations/new"
          $("#user-input-form-modal-mcb").show()
+         $("#loading-image").hide()
         }
 
         

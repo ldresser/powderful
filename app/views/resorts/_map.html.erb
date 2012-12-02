@@ -9,11 +9,13 @@
 
     //Loop through the resorts table and plot each on the map
     <% @resorts.each do |resort| %>
+    <% if @scHash[resort.snowcountry_id.to_s]["resortStatus"] == "1" %>
 	    var rLat = <%= resort.latitude %>
 	    var rLng = <%= resort.longitude %>
 	    var rTitle = '<%= resort.name %>'
 	    addMarkers(rLat,rLng,rTitle)
     <% end %>
+<% end %>
 
 var lat_min = <%= @lat_min %>
 var lng_min = <%= @lng_min %>

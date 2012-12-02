@@ -17,7 +17,7 @@ function stars(num){
         };
         
     };
-    console.log(num + " " + a);
+    //console.log(num + " " + a);
     return a.join("");
 
 };
@@ -32,49 +32,7 @@ function stars(num){
                 $( "#amount-distance" ).val( time_format($( "#slider-range-distance" ).slider( "values", 0 )) + " - " + time_format($( "#slider-range-distance" ).slider( "values", 1 )) ); 
             },
             change: function( event, ui ) {
-                var lb = ui.values[0];
-                var ub = ui.values[1];
-
-
-                // ** CHANGE THE MAP AND TABLE ROWS **
-                // logic: if row is out of bounds AND not hidden
-                // then hide and remove from map
-                // else if row is is bounds AND hidden
-                // then show and add to map
-                // else nothing
-
-
-                $('#listing-table tr').each(function(){
-                    $(this).find('td:nth-child(3)').each(function(){
-                    //    console.log("cell 11: " + $(this).text());
-                    //do your stuff, you can use $(this) to get current cell
-
-                    //(1) hide & remove if (< lb or > ub) and not yet hidden
-                    if ((parseFloat($(this).text()) < lb || parseFloat($(this).text()) > ub) && $(this).parent().is(":visible")) {
-                        //hide the row
-                        $(this).parent().hide();
-                        //remove marker from map
-                        var lat = parseFloat($(this).parent().find('td:nth-child(1)').text());
-                        var lng = parseFloat($(this).parent().find('td:nth-child(2)').text());
-                        //console.log("passing " + lat + ", " + lng); //debug
-                        delMarker(lat,lng); 
-                    }
-
-                    //(2) show & add if > lb and < ub and hidden
-                    if (parseFloat($(this).text()) > lb && parseFloat($(this).text()) < ub && !($(this).parent().is(":visible"))) {
-                        //hide the row
-                        $(this).parent().show();
-                        //remove marker from map
-                        var lat = parseFloat($(this).parent().find('td:nth-child(1)').text());
-                        var lng = parseFloat($(this).parent().find('td:nth-child(2)').text());
-                        var title = $(this).parent().find('td:nth-child(1)').text();
-                        // console.log("passing " + lat + ", " + lng);// debug
-                        addMarkers(lat,lng,title); 
-                    }
-
-                    })
-                })
-
+                updateScreen();
             }
             
         });
@@ -88,14 +46,15 @@ function stars(num){
         $( "#slider-range-conditions" ).slider({
             step: 1,
             range: true,
-            min: 0,
+            min: 1,
             max: 5,
-            values: [ 0, 5 ],
-            slide: function( event, ui ) {
+            values: [ 2, 4 ],
+            change: function( event, ui ) {
                 $( "#amount-conditions" ).val( stars($( "#slider-range-conditions" ).slider( "values", 0 )) + " - " + stars($( "#slider-range-conditions" ).slider( "values", 1 )) ); 
             }
         });
         $( "#amount-conditions" ).val( stars($( "#slider-range-conditions" ).slider( "values", 0 )) + " - " + stars($( "#slider-range-conditions" ).slider( "values", 1 )) ); 
+
     });
 
 
@@ -103,11 +62,15 @@ function stars(num){
         $( "#slider-range-price" ).slider({
             range: true,
             min: 0,
-            max: 500,
-            values: [ 75, 300 ],
+            max: price_max,
+            values: [ price_min , price_max ],
             slide: function( event, ui ) {
                 $( "#amount-price" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+            },
+            change: function( event, ui ) {
+                updateScreen();
             }
+
         });
         $( "#amount-price" ).val( "$" + $( "#slider-range-price" ).slider( "values", 0 ) +
             " - $" + $( "#slider-range-price" ).slider( "values", 1 ) );
@@ -115,3 +78,56 @@ function stars(num){
 
    
    
+
+   function updateScreen(){
+        var lb_distance = $( "#slider-range-distance" ).slider("values",0);
+        var ub_distance = $( "#slider-range-distance" ).slider("values",1);
+        var lb_price = $( "#slider-range-price" ).slider("values",0);
+        var ub_price = $( "#slider-range-price" ).slider("values",1);
+                    
+                    $('#listing-table tr').each(function(){
+                    $(this).find('td:nth-child(16)').each(function(){
+
+                    if (
+                            ((   
+                                parseFloat($(this).text().substring(1)) < lb_price 
+                                || parseFloat($(this).text().substring(1)) > ub_price
+                            ) 
+                            || (
+                                parseFloat($(this).parent().find('td:nth-child(3)').text()) < lb_distance
+                                || parseFloat($(this).parent().find('td:nth-child(3)').text()) > ub_distance
+                            ))
+                            && $(this).parent().is(":visible")
+                        ) 
+                            { 
+                                //hide the row
+                                $(this).parent().hide();
+                                //remove marker from map
+                                var lat = parseFloat($(this).parent().find('td:nth-child(1)').text());
+                                var lng = parseFloat($(this).parent().find('td:nth-child(2)').text());
+                                //console.log("passing " + lat + ", " + lng); //debug
+                                delMarker(lat,lng); 
+                            }
+
+                    //(2) show & add if > lb and < ub and hidden
+                    if (
+                            parseFloat($(this).text().substring(1)) > lb_price
+                            && parseFloat($(this).text().substring(1)) < ub_price
+                            && !($(this).parent().is(":visible"))
+                            && parseFloat($(this).parent().find('td:nth-child(3)').text()) > lb_distance
+                            && parseFloat($(this).parent().find('td:nth-child(3)').text()) < ub_distance
+                        ) {
+
+                        //hide the row
+                        $(this).parent().show();
+                        //remove marker from map
+                        var lat = parseFloat($(this).parent().find('td:nth-child(1)').text());
+                        var lng = parseFloat($(this).parent().find('td:nth-child(2)').text());
+                        var title = $(this).parent().find('td:nth-child(5)').text();
+                        // console.log("passing " + lat + ", " + lng);// debug
+                        addMarkers(lat,lng,title); 
+                    }
+
+                    })
+                })
+   };

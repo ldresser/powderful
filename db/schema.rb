@@ -11,9 +11,24 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121128045347) do
+ActiveRecord::Schema.define(:version => 20121201213941) do
 
-  create_table "resorts", :force => true do |t|
+  create_table "droutes", :force => true do |t|
+    t.string   "origin"
+    t.integer  "resort_id"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.integer  "drive_time_int"
+    t.string   "drive_time_str"
+    t.integer  "distance_int"
+    t.string   "distance_str"
+    t.string   "resort_address"
+  end
+
+  create_table "resorts", :id => false, :force => true do |t|
+    t.integer  "id"
     t.string   "name"
     t.integer  "runs"
     t.float    "pr_beginner"
@@ -32,8 +47,39 @@ ActiveRecord::Schema.define(:version => 20121128045347) do
     t.string   "state"
     t.string   "zip"
     t.string   "trail_map"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.integer  "snowcountryid"
+    t.integer  "drive_time_int"
+    t.string   "drive_time_str"
+    t.integer  "distance_int"
+    t.string   "distance_str"
+  end
+
+  create_table "resorts_backup", :id => false, :force => true do |t|
+    t.integer  "id"
+    t.string   "name"
+    t.integer  "runs"
+    t.float    "pr_beginner"
+    t.float    "pr_intermediate"
+    t.float    "pr_advanced"
+    t.float    "pr_expert"
+    t.integer  "area"
+    t.integer  "elevation_base"
+    t.integer  "elevation_peak"
+    t.integer  "vertical_drop"
+    t.integer  "longest_trail"
+    t.integer  "lifts"
+    t.string   "url"
+    t.string   "address"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip"
+    t.string   "trail_map"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.float    "latitude"
     t.float    "longitude"
     t.integer  "snowcountryid"
@@ -45,6 +91,7 @@ ActiveRecord::Schema.define(:version => 20121128045347) do
     t.float    "lng"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "uAddress"
   end
 
 end

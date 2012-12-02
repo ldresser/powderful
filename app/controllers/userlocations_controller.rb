@@ -56,6 +56,29 @@ class UserlocationsController < ApplicationController
       session[:uLng] = @userlocation.lng
     end
     
+    # scope back out to the city level
+    url2 = "http://maps.googleapis.com/maps/api/geocode/json?sensor=false&latlng=#{session[:uLat]},#{session[:uLng]}"
+    reverse_geocode_result = ActiveSupport::JSON.decode(open(url2).read)
+
+    # find the city
+    arrayLen = reverse_geocode_result["results"].length
+    reverse_geocode_result["results"].each do |result|
+      if result["types"][0] == "locality"
+        session[:uCity] = result["formatted_address"]
+      end
+    end
+    
+    
+
+    # do we already have this address (at the city level) in our Droutes db?
+    # NB look at dimension in Userlocations table first
+  
+    # if Userlocation.where(:origin => session[:uCity])  == nil
+    #     #add to Droutes table
+    #     droutes.create
+    # end
+
+
     # Boilerplate code
     redirect_to '/show'
 #    respond_to do |format|

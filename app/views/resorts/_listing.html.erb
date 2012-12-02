@@ -3,40 +3,53 @@
     <th>Latitude (hidden)</th>  <!--note, keep this col ordering the same; will need to change slider JS if this gets changed -->
     <th>Longitude (hidden)</th>  <!--note, keep this col ordering the same; will need to change slider JS if this gets changed -->
     <th>Travel Time int (hidden)</th>  <!--note, keep this col ordering the same; will need to change slider JS if this gets changed -->
+    <th>Resort status (hidden)</th>  <!--note, keep this col ordering the same; will need to change slider JS if this gets changed -->
     <th>Name</th>
+    <th>State</th>
+    <th>Driving Distance</th>
     <th>Trails Open</th>
     <th>Lifts Open</th>
-    <th>City</th>
-    <th>State</th>
-    <th>Distance</th>  
-    <th>Driving Distance</th>
     <th>New Snow (last 24h)</th>
+    <th>Snowfall last 48h</th>
     <th>Primary Surface Condition</th>
     <th>Base depth</th>
     <th>Comments</th>
+    <th>Weather Forecast</th>
+    <th>Lift Ticket Price</th>
+    <th>Powderful Star Rating</th>
   </tr>
 
 <% @resorts.each do |resort| %>
+<% if @scHash[resort.snowcountry_id.to_s]["resortStatus"] == "1" %>
+    
+
   <tr>
-    <td><%= resort.latitude %></td> <!-- KEY COLUMN! (currently=7)-->
-    <td><%= resort.longitude %></td> <!-- KEY COLUMN! (currently=8)-->
-    <td><%= @gmatrix_result["rows"][0]["elements"][resort.id - 1]["duration"]["value"] %></td>   <!-- KEY COLUMN! (currently=11)-->
+    <td><%= resort.latitude %></td> <!-- KEY COLUMN! (currently=1)-->
+    <td><%= resort.longitude %></td> <!-- KEY COLUMN! (currently=2)-->
+    <td><%= resort.duration_value %></td>   <!-- KEY COLUMN! (currently=3)-->
+    <td><%= @scHash[resort.snowcountry_id.to_s]["resortStatus"] %></td>  <!-- KEY COLUMN! (currently=4)-->
     <td><%= resort.name %></td>
-    <td><%= @scHash[resort.snowcountryid.to_s]["openDownHillTrails"] %></td>
-    <td><%= @scHash[resort.snowcountryid.to_s]["openDownHillLifts"] %></td>
-    <td><%= resort.city %></td>
     <td><%= resort.state %></td>
-    <td><%= @gmatrix_result["rows"][0]["elements"][resort.id - 1]["distance"]["text"] %></td>
-    <td><%= @gmatrix_result["rows"][0]["elements"][resort.id - 1]["duration"]["text"] %></td>
-    <td><%= @scHash[resort.snowcountryid.to_s]["newSnowMin"] %>" - <%= @scHash[resort.snowcountryid.to_s]["newSnowMax"] %>"</td>
-    <td><%= @scHash[resort.snowcountryid.to_s]["primarySurfaceCondition"] %></td>
-    <td><%= @scHash[resort.snowcountryid.to_s]["avgBaseDepthMin"] %>" - <%= @scHash[resort.snowcountryid.to_s]["avgBaseDepthMax"] %>"</td>
-    <td><%= @scHash[resort.snowcountryid.to_s]["snowComments"] %></td>
+    <td><%= resort.duration_text %></td>
+    <td><%= @scHash[resort.snowcountry_id.to_s]["openDownHillTrails"] %></td>
+    <td><%= @scHash[resort.snowcountry_id.to_s]["openDownHillLifts"] %></td>
+    <td><%= @scHash[resort.snowcountry_id.to_s]["newSnowMin"] %>" - <%= @scHash[resort.snowcountry_id.to_s]["newSnowMax"] %>"</td>
+    <td><%= @scHash[resort.snowcountry_id.to_s]["snowLast48Hours"] %>"</td>
+    <td><%= @scHash[resort.snowcountry_id.to_s]["primarySurfaceCondition"] %></td>
+    <td><%= @scHash[resort.snowcountry_id.to_s]["avgBaseDepthMin"] %>" - <%= @scHash[resort.snowcountry_id.to_s]["avgBaseDepthMax"] %>"</td>
+    <td><%= @scHash[resort.snowcountry_id.to_s]["snowComments"] %></td>
+    <td><%= @scHash[resort.snowcountry_id.to_s]["forecastWeather"] %></td>
+    <td>$<%= resort.price %></td> <!-- KEY COLUMN! (currently=16) -->
+    <td>    </td>
+
+
+
   </tr>
+<% end %>  
 <% end %>
 </table>
 
 <script>
  // Hide the hidden column
- $("th:nth-child(1),td:nth-child(1),th:nth-child(2),td:nth-child(2),th:nth-child(3),td:nth-child(3)").hide();
+ $("th:nth-child(1),td:nth-child(1),th:nth-child(2),td:nth-child(2),th:nth-child(3),td:nth-child(3),th:nth-child(4),td:nth-child(4)").hide();
  </script>
