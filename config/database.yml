@@ -28,3 +28,5 @@ production:
   pool: 5
   timeout: 5000
   port: 5432
+  username: vnmszklqibejpj
+  password: _iGcij3a-VRsoaH3lSdcm0NJ2g
