@@ -5,7 +5,7 @@
 	<script type="text/javascript">
 
     // Initialise the map and plot the user's current location
-    initialize(<%= session[:uLat] %>,<%= session[:uLng] %>)
+    initialize(<%= session[:uLat] %>,<%= session[:uLng] %>,'You are here')
 
     //Loop through the resorts table and plot each on the map
     <% @resorts.each do |resort| %>

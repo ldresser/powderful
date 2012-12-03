@@ -2,9 +2,12 @@
 
   var map
   var markersArray = []
+  var infowindow
+
+  
   
 
-  function initialize(lat,lng) {
+  function initialize(lat,lng,title) {
   	
     var mapOptions = {
       center: new google.maps.LatLng(lat,lng),
@@ -15,9 +18,19 @@
     map = new google.maps.Map(document.getElementById("map_canvas"),
         mapOptions);
     
-    var markerOptions = {map: map, position: new google.maps.LatLng(lat,lng), title: 'You are here'};
+
+
+    var markerOptions = {map: map, position: new google.maps.LatLng(lat,lng), title: title};
     var marker = new google.maps.Marker(markerOptions);
     markersArray.push(marker);
+
+    google.maps.event.addListener(marker, 'click', function() {
+      if (infowindow) infowindow.close();
+      infowindow = new google.maps.InfoWindow({content: title});
+      infowindow.open(map,marker);
+    });
+    
+
   }
  
 
@@ -27,6 +40,13 @@ function addMarkers(lat,lng,title) {
   var markerOptions = {map: map, position: new google.maps.LatLng(lat,lng), title: title};
   var marker = new google.maps.Marker(markerOptions);
   markersArray.push(marker);
+
+       
+    google.maps.event.addListener(marker, 'click', function() {
+      if (infowindow) infowindow.close();
+      infowindow = new google.maps.InfoWindow({content: title});
+      infowindow.open(map,marker);
+    });
 }
 
 
@@ -62,3 +82,8 @@ function zoomToFit(lat_max,lng_max,lat_min,lng_min) {
       }
   }
  }
+
+
+
+
+
