@@ -135,8 +135,9 @@ function stars(num){
                         var lat = parseFloat($(this).parent().find('td:nth-child(1)').text());
                         var lng = parseFloat($(this).parent().find('td:nth-child(2)').text());
                         var title = $(this).parent().find('td:nth-child(5)').text();
+                        var st_text = $(this).parent().find('td:nth-child(18)').text();
                         // console.log("passing " + lat + ", " + lng);// debug
-                        addMarkers(lat,lng,title); 
+                        addMarkers(lat,lng,title,st_text); 
                     }
 
                     })
