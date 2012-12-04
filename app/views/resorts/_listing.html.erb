@@ -7,6 +7,7 @@
     <th>Name</th>
     <th>State</th>
     <th>Driving Distance</th>
+    <th>Vertical Drop</th>
     <th>Trails Open</th>
     <th>Lifts Open</th>
     <th>New Snow (last 24h)</th>
@@ -15,35 +16,48 @@
     <th>Base depth</th>
     <th>Comments</th>
     <th>Weather Forecast</th>
-    <th>Lift Ticket Price</th>
+    <th>Lift Ticket Price</th> <!--note, keep this col ordering the same; will need to change slider JS if this gets changed -->
     <th>Powderful Star Rating</th>
+    <th>Powderful Star Rating (int--hidden)</th> <!--note, keep this col ordering the same; will need to change slider JS if this gets changed -->
   </tr>
 
-<% @resorts.each do |resort| %>
-<% if @scHash[resort.snowcountry_id.to_s]["resortStatus"] == "1" %>
+<% @resort_sorted.each do |resort| %>
+<% if resort.resortStatus == "1" %>
     
 
   <tr>
     <td><%= resort.latitude %></td> <!-- KEY COLUMN! (currently=1)-->
     <td><%= resort.longitude %></td> <!-- KEY COLUMN! (currently=2)-->
     <td><%= resort.duration_value %></td>   <!-- KEY COLUMN! (currently=3)-->
-    <td><%= @scHash[resort.snowcountry_id.to_s]["resortStatus"] %></td>  <!-- KEY COLUMN! (currently=4)-->
+    <td><%= resort.resortStatus %></td>  <!-- KEY COLUMN! (currently=4)-->
     <td><%= resort.name %></td>
     <td><%= resort.state %></td>
     <td><%= resort.duration_text %></td>
-    <td><%= @scHash[resort.snowcountry_id.to_s]["openDownHillTrails"] %></td>
-    <td><%= @scHash[resort.snowcountry_id.to_s]["openDownHillLifts"] %></td>
-    <td><%= @scHash[resort.snowcountry_id.to_s]["newSnowMin"] %>" - <%= @scHash[resort.snowcountry_id.to_s]["newSnowMax"] %>"</td>
-    <td><%= @scHash[resort.snowcountry_id.to_s]["snowLast48Hours"] %>"</td>
-    <td><%= @scHash[resort.snowcountry_id.to_s]["primarySurfaceCondition"] %></td>
-    <td><%= @scHash[resort.snowcountry_id.to_s]["avgBaseDepthMin"] %>" - <%= @scHash[resort.snowcountry_id.to_s]["avgBaseDepthMax"] %>"</td>
-    <td><%= @scHash[resort.snowcountry_id.to_s]["snowComments"] %></td>
-    <td><%= @scHash[resort.snowcountry_id.to_s]["forecastWeather"] %></td>
-    <td>$<%= resort.price %></td> <!-- KEY COLUMN! (currently=16) -->
-    <td>    </td>
-
-
-
+    <td><%= resort.verticaldrop %>ft</td>
+    <td><%= resort.openDownHillTrails %></td>
+    <td><%= resort.openDownHillLifts %></td>
+    <td><%= if resort.newSnowMin == "" 
+    			"0" 
+    		else
+    	 		resort.newSnowMin 
+    		end %>" - 
+    	<%= if resort.newSnowMax == "" 
+    			"0" 
+    		else 
+				resort.newSnowMax 
+			end %>"</td>
+    <td><%= if resort.snowLast48Hours == "" 
+    			"0" 
+    		else 
+    			resort.snowLast48Hours 
+    		end %>"</td>
+    <td><%= resort.primarySurfaceCondition %></td>
+    <td><%= resort.avgBaseDepthMin %>" - <%= resort.avgBaseDepthMax %>"</td>
+    <td><%= resort.snowComments %></td>
+    <td><%= resort.forecastWeather %></td>
+    <td>$<%= resort.price %></td> <!-- KEY COLUMN! (currently=17) -->
+    <td class="stars"><%= ("★" * (resort.stars / 8).floor) +  ("☆" * (5 - ((resort.stars / 8).floor))) %></td>
+    <td><%= (resort.stars / 8).floor %></td> <!-- KEY COLUMN! (currently=19) -->
   </tr>
 <% end %>  
 <% end %>
@@ -51,5 +65,5 @@
 
 <script>
  // Hide the hidden column
- $("th:nth-child(1),td:nth-child(1),th:nth-child(2),td:nth-child(2),th:nth-child(3),td:nth-child(3),th:nth-child(4),td:nth-child(4)").hide();
+ $("th:nth-child(1),td:nth-child(1),th:nth-child(2),td:nth-child(2),th:nth-child(3),td:nth-child(3),th:nth-child(4),td:nth-child(4),th:nth-child(19),td:nth-child(19)").hide();
  </script>

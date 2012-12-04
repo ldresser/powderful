@@ -48,8 +48,9 @@ function stars(num){
             range: true,
             min: 1,
             max: 5,
-            values: [ 2, 4 ],
+            values: [ 1, 5 ],
             change: function( event, ui ) {
+                updateScreen();
                 $( "#amount-conditions" ).val( stars($( "#slider-range-conditions" ).slider( "values", 0 )) + " - " + stars($( "#slider-range-conditions" ).slider( "values", 1 )) ); 
             }
         });
@@ -84,9 +85,12 @@ function stars(num){
         var ub_distance = $( "#slider-range-distance" ).slider("values",1);
         var lb_price = $( "#slider-range-price" ).slider("values",0);
         var ub_price = $( "#slider-range-price" ).slider("values",1);
+        var lb_conditions = $( "#slider-range-conditions" ).slider("values",0);
+        var ub_conditions = $( "#slider-range-conditions" ).slider("values",1);
+
                     
                     $('#listing-table tr').each(function(){
-                    $(this).find('td:nth-child(16)').each(function(){
+                    $(this).find('td:nth-child(17)').each(function(){
 
                     if (
                             ((   
@@ -96,6 +100,10 @@ function stars(num){
                             || (
                                 parseFloat($(this).parent().find('td:nth-child(3)').text()) < lb_distance
                                 || parseFloat($(this).parent().find('td:nth-child(3)').text()) > ub_distance
+                            )
+                            || (
+                                parseFloat($(this).parent().find('td:nth-child(19)').text()) < lb_conditions
+                                || parseFloat($(this).parent().find('td:nth-child(19)').text()) > ub_conditions
                             ))
                             && $(this).parent().is(":visible")
                         ) 
@@ -111,11 +119,14 @@ function stars(num){
 
                     //(2) show & add if > lb and < ub and hidden
                     if (
-                            parseFloat($(this).text().substring(1)) > lb_price
-                            && parseFloat($(this).text().substring(1)) < ub_price
+                            parseFloat($(this).text().substring(1)) >= lb_price
+                            && parseFloat($(this).text().substring(1)) <= ub_price
+                            && parseFloat($(this).parent().find('td:nth-child(3)').text()) >= lb_distance
+                            && parseFloat($(this).parent().find('td:nth-child(3)').text()) <= ub_distance
+                            && parseFloat($(this).parent().find('td:nth-child(19)').text()) >= lb_conditions
+                            && parseFloat($(this).parent().find('td:nth-child(19)').text()) <= ub_conditions
                             && !($(this).parent().is(":visible"))
-                            && parseFloat($(this).parent().find('td:nth-child(3)').text()) > lb_distance
-                            && parseFloat($(this).parent().find('td:nth-child(3)').text()) < ub_distance
+
                         ) {
 
                         //hide the row
@@ -131,3 +142,6 @@ function stars(num){
                     })
                 })
    };
+
+
+ 

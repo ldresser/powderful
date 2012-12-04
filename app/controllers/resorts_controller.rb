@@ -6,6 +6,7 @@ class ResortsController < ApplicationController
     require 'json'
 
 
+    # @resorts = Resort.order("cast(verticalDrop as int) desc")
     @resorts = Resort.all
 
 
@@ -81,6 +82,96 @@ class ResortsController < ApplicationController
       ## fast way (build a hash):
       #Hash[scArray.map { |h| h.values_at('id','newSnowMin')}]
       @scHash = scArray.inject({}) {|h,i| h[i["id"]]=i; h}
+
+      # figure out star rating for each resort
+      @scHash.each do |k, v|
+
+          case v["primarySurfaceCondition"]
+          when 'Packed Powder'
+            p1 = 3
+          when 'Powder'
+            p1 = 4
+          when 'Hard Pack'
+            p1 = 2
+          when 'Lose Granular'
+            p1 = 3
+          when 'Frozen Granular'
+            p1 = 2
+          when 'Wet Packed'
+            p1 = 2
+          when 'Wet Granular'
+            p1 = 1
+          when 'Wet Snow'
+            p1 = 2
+          when 'Spring Conditions'
+            p1 = 3
+          when 'Windblown'
+            p1 = 2
+          when 'Corn Snow'
+            p1 = 1
+          when 'Icy'
+            p1 = 1
+          when 'Variable Conditions'
+            p1 = 2
+          else
+            p1 = 0
+          end      
+             
+         case v["forecastBaseTemp"].to_i 
+         when v["forecastBaseTemp"].to_i < 0
+          p2 = 0
+        when 0..15
+          p2 = 1
+        when 16..25
+          p2 = 2
+        when 26..35
+          p2 = 3
+        when 36..45
+          p2 = 4
+        when 46..55
+          p2 = 1
+        else
+          p2 = 0
+        end 
+
+        p3 = [v["avgBaseDepthMin"].to_i/6,4].min
+        p4 = [v["newSnowMin"].to_i/3,3].min
+
+        case v["nightGrooming"]
+        when "yes"
+          p5 = 3
+        else 
+          p5 = 0
+        end
+
+        p6 = v["openDownHillTrails"].to_i / 20
+
+         v["stars"] = (p1 + p2 + p3 + p4 + p5 + p6)
+
+     end
+
+        
+     @c = @resorts.map do |resort|
+        
+        resort["resortStatus"] = @scHash[resort["snowcountry_id"].to_s]["resortStatus"]
+        resort["openDownHillTrails"] = @scHash[resort["snowcountry_id"].to_s]["openDownHillTrails"]
+        resort["openDownHillLifts"] = @scHash[resort["snowcountry_id"].to_s]["openDownHillLifts"]
+        resort["newSnowMin"] = @scHash[resort["snowcountry_id"].to_s]["newSnowMin"]
+        resort["newSnowMax"] = @scHash[resort["snowcountry_id"].to_s]["newSnowMax"]
+        resort["snowLast48Hours"] = @scHash[resort["snowcountry_id"].to_s]["snowLast48Hours"]
+        resort["primarySurfaceCondition"] = @scHash[resort["snowcountry_id"].to_s]["primarySurfaceCondition"]
+        resort["avgBaseDepthMin"] = @scHash[resort["snowcountry_id"].to_s]["avgBaseDepthMin"]
+        resort["avgBaseDepthMax"] = @scHash[resort["snowcountry_id"].to_s]["avgBaseDepthMax"]
+        resort["snowComments"] = @scHash[resort["snowcountry_id"].to_s]["snowComments"]
+        resort["stars"] = @scHash[resort["snowcountry_id"].to_s]["stars"] + (resort.verticaldrop.to_i / 350)
+        resort["forecastWeather"] = @scHash[resort["snowcountry_id"].to_s]["forecastWeather"] 
+
+        resort
+      end
+
+          # @resorts = Resort.order("cast(verticalDrop as int) desc")
+        @resort_sorted = @resorts.sort_by { |h| h[:stars] }.reverse!
+
 
    # Resort.prep_for_view()
 
@@ -162,3 +253,4 @@ class ResortsController < ApplicationController
     end
   end
 end
+

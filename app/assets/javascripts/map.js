@@ -35,7 +35,7 @@
  
 
 
-function addMarkers(lat,lng,title) {
+function addMarkers(lat,lng,title,stars_rank) {
 
   var markerOptions = {map: map, position: new google.maps.LatLng(lat,lng), title: title};
   var marker = new google.maps.Marker(markerOptions);
@@ -44,7 +44,7 @@ function addMarkers(lat,lng,title) {
        
     google.maps.event.addListener(marker, 'click', function() {
       if (infowindow) infowindow.close();
-      infowindow = new google.maps.InfoWindow({content: title});
+      infowindow = new google.maps.InfoWindow({content: title + '<br />' + stars_rank});
       infowindow.open(map,marker);
     });
 }
